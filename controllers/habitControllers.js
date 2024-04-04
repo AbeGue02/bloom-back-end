@@ -20,6 +20,17 @@ const getHabitById = async (req,res) => {
     }
 }
 
+const getHabitsFromUser = async (req,res) => {
+    try {
+        const habits = await Habit.find({user: req.params.userID})
+        if (habits) {
+            res.json(habits)
+        }
+    } catch (error) {
+        return res.status(500).send('Habits with the specified User do not exists');
+    }
+}
+
 const createHabit = async (req,res) => {
     try {
         const habit = await new Habit(req.body)
@@ -62,6 +73,7 @@ const deleteHabit = async (req,res) => {
 module.exports = {
     getHabits,
     getHabitById,
+    getHabitsFromUser,
     createHabit,
     updateHabit,
     deleteHabit

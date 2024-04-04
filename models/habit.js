@@ -2,6 +2,7 @@ const { Schema } = require('mongoose')
 
 const HabitSchema = new Schema(
     {
+        user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
         title: { type: String, required: true },
         emoji: { type: String, required: true },
         frequency: { type: String, required: true, default: 'daily' },

@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Tier } = require('../models')
 
 const getUsers = async (req, res) => {
     try {
@@ -22,13 +22,32 @@ const getUserById = async (req,res) => {
 
 const createUser = async (req,res) => {
     try {
-        const user = await new User(req.body)
-        await user.save()
-        return res.status(201).json({
-            user,
-        })
+        const minTier = await Tier.find({ min_score: 0 })
+        let user = new User(req.body)
+        user.tier = minTier[0]._id
+        const matchingUsers = await User.find({ $or: [{username: req.body.username}, {email: req.body.email}] })
+        console.log(user)
+        if (!matchingUsers.length) {
+            await user.save()
+            return res.status(201).json({
+                user,
+            })
+        } else {
+            return res.status(403).send("User already exists with that email or username")
+        }
+        
     } catch (e) {
         return res.status(500).json({ error: e.message })
+    }
+}
+
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body
+        const user = await User.find({email: email, password: password})
+        user.length ? res.status(201).json(user[0]) : res.status(403).send('User with credentials could not be found')
+    } catch (error) {
+        return res.status(500).send("An error has occured")
     }
 }
 
@@ -63,6 +82,7 @@ module.exports = {
     getUsers,
     getUserById,
     createUser,
+    loginUser,
     updateUser,
     deleteUser
 }
