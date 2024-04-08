@@ -6,7 +6,7 @@ const HabitSchema = new Schema(
         title: { type: String, required: true },
         emoji: { type: String, required: true },
         frequency: { type: String, required: true, default: 'daily' },
-        notes: { type: String, required: true, default: "" },
+        notes: { type: String, required: false, default: "" },
         completions: { type: [Date], required: true, default: [] },
         reminders: { type: Boolean, required: true, default: true },
         reminder_time: { type: Date, required: false, default: new Date(0,0,0,9) },

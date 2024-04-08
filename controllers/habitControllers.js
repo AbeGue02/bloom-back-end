@@ -24,7 +24,7 @@ const getHabitsFromUser = async (req,res) => {
     try {
         const habits = await Habit.find({user: req.params.userID})
         if (habits) {
-            res.json(habits)
+            res.status(201).json(habits)
         }
     } catch (error) {
         return res.status(500).send('Habits with the specified User do not exists');

@@ -11,7 +11,7 @@ const getUsers = async (req, res) => {
 
 const getUserById = async (req,res) => {
     try {
-        const user = await User.findById(req.params.userID)
+        const user = await User.findById(req.params.userID).populate('tier')
         if (user) {
             res.json(user)
         }
